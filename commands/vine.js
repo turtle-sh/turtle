@@ -16,6 +16,7 @@ turtle.addCommand({
       }.bind(this) )
       .fail(function() {
         this.stdout.log("vine error: id not found. Try bXZre5gtYgT instead!")
+        this.exit();
       }.bind(this) );
 
       var close;
@@ -25,10 +26,12 @@ turtle.addCommand({
         this.stdout.el.find('.vine').remove();
         this.el.find('form').show();
         key.unbind('ctrl+c');
+        key.unbind('esc');
         _exit();
       }.bind(this);
       close = this.exit;
       key('ctrl+c', close);
+      key('esc', close);
     return false;
   }
 });
