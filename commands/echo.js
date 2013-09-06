@@ -1,6 +1,7 @@
 turtle.addCommand({
-  "expr": /echo (.*)/,
+  "expr": /^echo (.*)/,
   "fn": function(message) {
     this.stdout.write(message);
+    this.exit();
   }
 });

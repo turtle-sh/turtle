@@ -2,10 +2,30 @@
   "manifest_version": 2,
   "name": "turtle",
   "description": "shell",
-  "version": "0.0",
+  "version": "0.1.0",
   "app": {
-    "launch": {
-      "local_path": "window.html"
+    "background": {
+      "scripts": ["background.js"]
     }
+  },
+  "permissions": [
+    "fileSystem",
+    "fileSystem.write",
+    "fileSystem.directory",
+    "fileSystem.retainEntries",
+    "storage",
+    "storage.unlimitedStorage",
+    "storage.sync",
+    "https://vine.co/"
+  ],
+  "icons": {
+    "16": "image/icon-16.png",
+    "32": "image/icon-32.png",
+    "48": "image/icon-48.png",
+    "64": "image/icon-64.png",
+    "96": "image/icon-96.png",
+    "128": "image/icon-128.png",
+    "256": "image/icon-256.png",
+    "512": "image/icon-512.png"
   }
 }
