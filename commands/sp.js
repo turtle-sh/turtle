@@ -1,4 +1,4 @@
-turtle.addCommand({
+define({
   "expr": /^(v?sp)$/,
   "fn": function(arg) {
 

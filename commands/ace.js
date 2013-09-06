@@ -1,4 +1,5 @@
-turtle.addCommand({
+define({
+  "name": "ace",
   "expr": /^ace$/,
   "fn": function(message) {
 

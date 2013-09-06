@@ -1,4 +1,4 @@
-turtle.addCommand({
+define({
   "expr": /^q$/,
   "fn": function(arg) {
     var children = _(this.el.parent().children()).filter(function(el) {

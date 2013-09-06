@@ -1,4 +1,4 @@
-turtle.addCommand({
+define({
   "expr": /mount/,
   "fn": function(message) {
     chrome.fileSystem.chooseEntry({

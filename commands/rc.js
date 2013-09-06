@@ -1,4 +1,4 @@
-turtle.addCommand({
+define({
   "expr": /^(ace|vim) ~\/(.*)/,
   "fn": function(editor, fileName) {
     console.log(fileName);

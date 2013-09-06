@@ -67,11 +67,12 @@ Turtle.prototype.exec = function(command) {
 
 
 Turtle.prototype.addCommand = function(commandObj) {
+  var commandsArray = ('commands' in this) ? this.commands : this.prototype.commands;
   if (typeof commandObj.fn !== 'function') 
     throw "commandObj.fn must be a function.";
   if (typeof commandObj.expr !== 'object' && commandObj.expr.test) 
     throw "commandObj.fn must be a RegExp.";
-  this.commands.push(commandObj);
+  commandsArray.push(commandObj);
 };
 
 

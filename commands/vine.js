@@ -1,4 +1,4 @@
-turtle.addCommand({
+define({
   "expr": /^vine (.*)$/,
   "fn": function(id) {
     $.ajax({ url: "https://vine.co/v/" + id + "/embed/simple"})

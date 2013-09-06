@@ -1,4 +1,4 @@
-turtle.addCommand({
+define({
   "expr": /^clear/,
   "fn": function() {
     this.stdout.clear();

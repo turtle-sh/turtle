@@ -1,4 +1,4 @@
-turtle.addCommand({
+define({
   "expr": /^vim$/,
   "fn": function() {
     this.exec('ace');
