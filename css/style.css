@@ -8,8 +8,8 @@ body {
   color: white;
   font-family: courier;
   -webkit-font-smoothing: antialiased;
-  margin: 0.2em;
   font-size: 14px;
+  margin: 0;
 }
 .ps {
   padding-right: .4em;
@@ -18,6 +18,10 @@ p, span {
   white-space: pre;
   tab-size: 1;
   word-wrap: break-word;
+}
+p, form.command {
+  margin: 0;
+  padding: 0em 0.2em;
 }
 
 form.command input {
@@ -35,12 +39,12 @@ i {
   color: inherit;
 }
 
-p {
-  margin: 0;
-  padding: 0;
-}
 .fill {
   height: 100%;
   width: 100%;
 }
 
+.turtle {
+  width: 100%;
+  height: 100%;
+}

@@ -4,26 +4,13 @@ Turtle = function(conf) {
 
 Turtle.prototype.init = function(conf) {
   _.extend(this, conf, Backbone.Events);
-  this.commands = [];
+  this.render();
 
   this.ps1 = "<span class='ps'>$</span>";
 
-  this.el.append(this.template());
+  this.render();
 
-  this.stdout = new Stdout({
-    el: this.el.find('.output')
-  });
   this.storage = new Storage();
-
-  this.inputEl = this.el.find('form.command input');
-  this.el.find('form.command').submit( function(e) {
-    e.preventDefault();
-    var val = this.inputEl.val();
-    this.inputEl.val('');
-    this.stdout.log(this.ps1 + val);
-    this.exec(val);
-  }.bind(this) );
-
 
   $.getJSON('manifest.json', function(manifest) {
     this.manifest = manifest;
@@ -33,9 +20,29 @@ Turtle.prototype.init = function(conf) {
 
 };
 
+Turtle.prototype.render = function() {
+  this.el.html(this.template());
+  // Establish stdout
+  this.stdout = new Stdout({
+    el: this.el.find('.output')
+  });
+  // Enter
+  this.inputEl = this.el.find('form.command input');
+  this.el.find('form.command').submit( function(e) {
+    e.preventDefault();
+    var val = this.inputEl.val();
+    this.inputEl.val('');
+    this.stdout.log(this.ps1 + val);
+    this.exec(val);
+  }.bind(this) );
+};
+
+
 Turtle.prototype.template = function() {
   return '<div class="output"></div><form class="command">' + this.ps1 + '<input type="text" /></form>';
 };
+
+Turtle.prototype.commands = [];
 
 Turtle.prototype.exec = function(command) {
   this.exit = function() {
@@ -66,3 +73,52 @@ Turtle.prototype.addCommand = function(commandObj) {
     throw "commandObj.fn must be a RegExp.";
   this.commands.push(commandObj);
 };
+
+
+/* pipe thoughts
+ *
+ * wc.stdout.pipe(this.stdout);
+ * cat.stdout.pipe(wc.stdin);
+ *
+ * wc
+ * var text = [];
+ * this.stdin.on('data', function(data) {
+ *   text = text.concat(data);
+ * });
+ * this.stdin.on('end', function() {
+ *    this.stdout.log(text.length);
+ *    this.exit()
+ * }.bind(this));
+ *
+ * So: 
+ *  - objects need to have their own stdin, stdout
+ *  - Yet continue to have access to things like exit() and el() and editor()
+ *
+ */
+
+/* prompt
+ *
+ * prompt('subject');
+ * prompt({
+ *  name: 'subject',
+ *  message: 'What's the subject of your email?',
+ *  required: true
+ * });
+ *
+ * prompt.subject
+ *
+ */
+
+/* package
+ *
+ * install ls
+ *
+ * https://turtle.sh/package/ls
+ *
+ * 200: 
+ *  https://github.com/itsjoesullivan/ls/blob/master/index.js
+ *  curl index.js
+ *  storage.set('package/ls', ls);
+ *  packages.add('ls');
+ *
+ */

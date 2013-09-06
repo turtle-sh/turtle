@@ -16,7 +16,9 @@
     "storage",
     "storage.unlimitedStorage",
     "storage.sync",
-    "https://vine.co/"
+    "https://vine.co/",
+    "identity",
+    "https://api.twitter.com/"
   ],
   "icons": {
     "16": "image/icon-16.png",
