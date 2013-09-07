@@ -45,9 +45,18 @@ Turtle.prototype.template = function() {
 Turtle.prototype.commands = [];
 
 Turtle.prototype.exec = function(command) {
+  // Give the process something to exit
   this.exit = function() {
-    this.el.find('form.command input').focus();
-  };
+    console.log('exit');
+    console.log(this.el.find('form'));
+    this.el.find('form.command').show();
+    this.el.find('form.command input')
+      .focus();
+  }.bind(this);
+  // Go into process-mode
+  this.el.find('form.command').hide();
+
+  // Search for and initiate the process
   found = _(this.commands).some(function(commandObj) {
     if (commandObj.expr.test(command) ) {
       try {
@@ -59,6 +68,8 @@ Turtle.prototype.exec = function(command) {
       return true;
     }
   }, this);
+
+  // Or go back
   if(!found) {
     this.stdout.log("turtle: " + command + ": command not found")
     this.exit();
