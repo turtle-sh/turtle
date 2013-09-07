@@ -1,5 +1,5 @@
 define({
-  "expr": /mount/,
+  "expr": /^mount/,
   "fn": function(message) {
     chrome.fileSystem.chooseEntry({
       type: "openDirectory"   

@@ -45,7 +45,7 @@ function retrieveToken() {
     this.stdout.write('<i style="color:green" class="icon-thumbs-up"></i>');
     _.extend(credentials, obj);
     Q.resolve();
-  }.bind(this) );
+  }.bind(this) )
 }
 
 function init() {
@@ -77,6 +77,78 @@ function auth() {
 
 define([],[
   {
+    expr: /^github mount/,
+    fn: (function() {
+      return function(arg) {
+        arg.unshift('node');
+        var program = new Commander();
+        program
+          .usage('<repo>')
+          .parse(arg);
+        var repoName;
+        if(program.args.length > 1 ) {
+          repoName  = program.args[1];
+        }
+        if(!repoName) {
+          this.stdout.log('usage: github mount &lt;repo&gt;');
+          return this.exit();
+        }
+        auth.apply(this).then(function() {
+          this.fs = github.getRepo(repoUser, repoName);
+          this.fs.show(function(err, repo) {
+            if(err) {
+              return this.exit(err);
+            }
+            this.stdout.log(repo.name + ' mounted from ' + repo.git_url);
+            this.exit();
+          }.bind(this));
+          this._cwd = '/';
+        }.bind(this));
+      }
+    })()
+  },
+  {
+    expr: /^github cat /,
+    fn: (function() {
+      return function(arg) {
+        arg.unshift('node');
+        var program = new Commander();
+        program
+          .parse(arg);
+        var fileName;
+        if(program.args.length > 1 ) {
+          fileName  = program.args[1];
+        }
+        if(!branch) {
+          this.stdout.log('usage: git cat &lt;file&gt;');
+          return this.exit();
+        }
+        auth.apply(this).then(function() {
+          var res = Q.defer();
+          if(this.fs && this.fs instanceof Github.Repository) {
+            repo = this.fs;
+          } else {
+            repo = github.getRepo(repoUser, repoName);
+          }
+          var filePath = path.resolve(this.cwd(), fileName);
+          console.log(filePath);
+          repo.read('master', filePath.replace(/^\//,''), function(err, data) {
+            if(err) {
+              throw new Error("repo.read failed to read " + filePath);
+            } else {
+              this.stdout.write(data);
+              this.exit();
+              res.resolve();
+            }
+          }.bind(this) );
+        }.bind(this))
+        .fail(function(err) {
+          this.exit(err);
+        });
+      }
+    })()
+  },
+  {
     expr: /^github ls-tree/,
     fn: (function() {
       return function(arg) {
@@ -96,18 +168,24 @@ define([],[
           return this.exit();
         }
         auth.apply(this).then(function() {
-          var repo = github.getRepo(repoUser, repoName);
-          repo.getTree(branch, function(err, contents) {
-            console.log(program);
+          if(this.fs && this.fs instanceof Github.Repository) {
+            repo = this.fs;
+          } else {
+            repo = github.getRepo(repoUser, repoName);
+          }
+          repo.contents(branch, this.cwd(), function(err, contents) {
             _(contents).each(function(file) {
               if(program.nameOnly) {
-                this.stdout.log(file.path);
+                this.stdout.log(path.basename(file.path));
               } else {
                 var sha = file.sha;
                 if(program.abbrev) {
                   sha = file.sha.substring(0, program.abbrev);
                 }
-                this.stdout.log(file.mode + ' ' + file.type + ' ' + sha + '\t' + file.path);
+                this.stdout.log(file.mode + 
+                  ' ' + file.type + 
+                  ' ' + sha + 
+                  '\t' + path(file.path).basename );
               }
               this.exit();
             }, this);

@@ -16,10 +16,27 @@ Stdout.prototype.write = function(message) {
   }
 };
 
+function formErr(err) {
+    return formGithubErr(err);
+}
+
+function formGithubErr(err) {
+  return {
+    message: "<i class='icon-meh'></i> " + err.error + " " + err.request.statusText
+  }
+}
+
 Stdout.prototype.err = function(e) {
-  this.log('<font style="color: red">' + e.message + '</font>');
-  stack = '' + e.stack.split('\n').slice(1).join('\n');
-  this.log(stack);
+  console.log(e);
+  if(! e.message) {
+    e = formErr(e);
+  }
+  console.log(e);
+  this.log('<font style="color:#fd4741">' + e.message + '</font>');
+  if(e.stack) {
+    stack = '' + e.stack.split('\n').slice(1).join('\n');
+    this.log(stack);
+  }
 }
 
 Stdout.prototype.log = function(message) {

@@ -1,7 +1,12 @@
 define({
   "expr": /^ls/,
   "fn": function() {
-    this.stdout.write('ls will be implemented when fileSystem.directory becomes available.');
-    this.exit();
+    if(this.fs && this.fs instanceof Github.Repository) {
+      this.exit();
+      this.exec('github ls-tree master --name-only');
+    } else {
+      this.stdout.log('nothing mounted.');
+      this.exit();
+    }
   }
 });

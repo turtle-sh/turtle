@@ -7,6 +7,8 @@ storage = new Storage();
 var coreCommands = [
   'ls',
   'pwd',
+  'cd',
+  'cat',
   'echo',
   'clear',
   'mount',

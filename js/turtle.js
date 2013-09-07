@@ -12,6 +12,8 @@ Turtle.prototype.init = function(conf) {
 
   this.storage = new Storage();
 
+  this._cwd = '';
+
   $.getJSON('manifest.json', function(manifest) {
     this.manifest = manifest;
     this.exec('echo turtle v' + this.manifest.version);
@@ -20,6 +22,13 @@ Turtle.prototype.init = function(conf) {
 
 };
 
+Turtle.prototype.cwd = function() {
+  return this._cwd;
+};
+
+Turtle.prototype.chdir = function(dir) {
+  return this._cwd = dir;
+};
 
 Turtle.prototype.render = function() {
   this.el.html(this.template());
@@ -45,12 +54,18 @@ Turtle.prototype.template = function() {
 
 Turtle.prototype.commands = [];
 
+
 Turtle.prototype.exec = function(command) {
   // Give the process something to exit
-  this.exit = function() {
+  this.exit = function(e) {
+    if(e) {
+      this.stdout.err(e);
+    }
     this.el.find('form.command').show();
     this.el.find('form.command input')
       .focus();
+    this.el.scrollTop(this.inputEl.position().top);
+    
   }.bind(this);
   // Go into process-mode
   this.el.find('form.command').hide();
@@ -59,11 +74,11 @@ Turtle.prototype.exec = function(command) {
   found = _(this.commands).some(function(commandObj) {
     if (commandObj.expr.test(command) ) {
       try {
-        console.log(command);
         commandObj.fn.call(this, command.split(' '));
       } catch(e) {
         window.e = e;
         this.stdout.err(e)
+        this.exit();
       }
       return true;
     }
@@ -78,9 +93,7 @@ Turtle.prototype.exec = function(command) {
 
 
 Turtle.prototype.addCommand = function(commandObj) {
-  console.log(commandObj);
   if(_(commandObj).isArray()) {
-    console.log('array', commandObj);
     var addCommand = this.addCommand || this.prototype.addCommand;
 
     return _(commandObj).each(addCommand, this);

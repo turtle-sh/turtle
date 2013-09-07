@@ -9,13 +9,13 @@
   // Initial Setup
   // -------------
 
-  var XMLHttpRequest, Base64, _;
+  var XMLHttpRequest, Base64;
   if (typeof exports !== 'undefined') {
       XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
-      _ = require('underscore');
+      var _ = require('underscore');
       Base64 = require('./lib/base64.js');
   }else{
-      _ = window._;
+      var _ = window._;
       Base64 = window.Base64;
   }
   //prefer native XMLHttpRequest always
@@ -237,7 +237,8 @@
         // Just use head if path is empty
         if (path === "") return that.getRef("heads/"+branch, cb);
         that.getTree(branch+"?recursive=true", function(err, tree) {
-          var file = _.select(tree, function(file) {
+          console.log(err, tree, _);
+          var file = _(tree).select(function(file) {
             return file.path === path;
           })[0];
           cb(null, file ? file.sha : null);
@@ -346,7 +347,10 @@
       // --------
 
       this.contents = function(branch, path, cb) {
-        _request("GET", repoPath + "/contents?ref=" + branch, { path: path }, cb);
+        if(path.substring(0,1) === '/') {
+          path = path.substring(1);
+        }
+        _request("GET", repoPath + "/contents?ref=" + branch + (path ? '&path=' + encodeURIComponent(path) : '' ), { path: path }, cb);
       };
 
       // Fork repository
