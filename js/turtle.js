@@ -20,6 +20,7 @@ Turtle.prototype.init = function(conf) {
 
 };
 
+
 Turtle.prototype.render = function() {
   this.el.html(this.template());
   // Establish stdout
@@ -47,8 +48,6 @@ Turtle.prototype.commands = [];
 Turtle.prototype.exec = function(command) {
   // Give the process something to exit
   this.exit = function() {
-    console.log('exit');
-    console.log(this.el.find('form'));
     this.el.find('form.command').show();
     this.el.find('form.command input')
       .focus();
@@ -60,7 +59,8 @@ Turtle.prototype.exec = function(command) {
   found = _(this.commands).some(function(commandObj) {
     if (commandObj.expr.test(command) ) {
       try {
-        commandObj.fn.apply(this, commandObj.expr.exec(command).slice(1) );
+        console.log(command);
+        commandObj.fn.call(this, command.split(' '));
       } catch(e) {
         window.e = e;
         this.stdout.err(e)
@@ -78,11 +78,13 @@ Turtle.prototype.exec = function(command) {
 
 
 Turtle.prototype.addCommand = function(commandObj) {
+  // Can be treated as static.
   var commandsArray = ('commands' in this) ? this.commands : this.prototype.commands;
   if (typeof commandObj.fn !== 'function') 
     throw "commandObj.fn must be a function.";
   if (typeof commandObj.expr !== 'object' && commandObj.expr.test) 
     throw "commandObj.fn must be a RegExp.";
+
   commandsArray.push(commandObj);
 };
 

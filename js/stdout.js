@@ -3,7 +3,7 @@ Stdout = function(conf) {
 };
 
 Stdout.prototype.write = function(message) {
-  messageArr = message.split('\n');
+  messageArr = message.toString().split('\n');
   if(!this.el.children().length) {
     this.el.append('<p></p>');
   }
@@ -23,6 +23,7 @@ Stdout.prototype.err = function(e) {
 }
 
 Stdout.prototype.log = function(message) {
+  message = message.toString();
   if(this.el.children().length && this.el.children().last().html().length) {
     this.write('\n');
   }

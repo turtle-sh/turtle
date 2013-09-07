@@ -2,6 +2,8 @@ require.config({
   baseUrl: 'commands'
 });
 
+storage = new Storage();
+
 var coreCommands = [
   'ls',
   'pwd',
@@ -14,13 +16,13 @@ var coreCommands = [
   'rc',
   'vine',
   'sp',
-  'q'
+  'q',
+  //'github'
 ];
 
 function loadCoreCommands() {
   var res = Q.defer();
   require(coreCommands,function() {
-    console.log(arguments);
     _(arguments).each(Turtle.prototype.addCommand, Turtle);
     res.resolve();
   });
