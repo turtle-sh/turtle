@@ -16,7 +16,7 @@ body {
 }
 p, span {
   white-space: pre;
-  tab-size: 1;
+  tab-size: 2;
   word-wrap: break-word;
 }
 p, form.command {
@@ -33,6 +33,7 @@ form.command input {
   color: inherit;
   font:inherit;
   -webkit-font-smoothing: antialiased;
+  width: 90%;
 }
 
 i {
