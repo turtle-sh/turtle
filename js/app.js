@@ -17,7 +17,7 @@ var coreCommands = [
   'vine',
   'sp',
   'q',
-  //'github'
+  'github'
 ];
 
 function loadCoreCommands() {

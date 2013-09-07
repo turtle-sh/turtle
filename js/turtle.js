@@ -78,6 +78,13 @@ Turtle.prototype.exec = function(command) {
 
 
 Turtle.prototype.addCommand = function(commandObj) {
+  console.log(commandObj);
+  if(_(commandObj).isArray()) {
+    console.log('array', commandObj);
+    var addCommand = this.addCommand || this.prototype.addCommand;
+
+    return _(commandObj).each(addCommand, this);
+  }
   // Can be treated as static.
   var commandsArray = ('commands' in this) ? this.commands : this.prototype.commands;
   if (typeof commandObj.fn !== 'function') 
