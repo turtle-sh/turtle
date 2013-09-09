@@ -11,11 +11,8 @@
   "permissions": [
     "fileSystem",
     "fileSystem.write",
-    "fileSystem.directory",
     "fileSystem.retainEntries",
     "storage",
-    "storage.unlimitedStorage",
-    "storage.sync",
     "https://vine.co/",
     "identity",
     "https://api.twitter.com/",
