@@ -69,7 +69,7 @@ Turtle.prototype.exec = function(command) {
   process.stdout.pipe(this.stdout);
   process.cwd = this.cwd;
   process.chdir = this.chdir;
-  process.fs = this.fs;
+  process.fs = this.fs.bind(this);
 
   // Give the process something to exit
   process.exit = function(e) {

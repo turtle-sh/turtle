@@ -5,6 +5,7 @@ require.config({
 storage = new Storage();
 
 var coreCommands = [
+  'pipe',
   'ls',
   'pwd',
   'cd',

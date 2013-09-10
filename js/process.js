@@ -22,7 +22,7 @@ Process.prototype.spawn = function() {
   var process = new Process();
   process.cwd = this.cwd;
   process.chdir = this.chdir;
-  process.fs = this.fs;
+  process.fs = this.fs.bind(this);
   process.stdout.pipe(this.stdin);
   process.exit = this.exit;
   return process;

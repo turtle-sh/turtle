@@ -5,7 +5,7 @@ define({
       this.exit();
       var newArgs = args.slice(0);
       newArgs.unshift('github');
-      this.exec(newArgs.join(' ') );
+      this.exec(newArgs.join(' '), true );
     } else {
       this.stdout.log('no filesystem mounted.');
       this.exit();
