@@ -16,6 +16,12 @@ Stdout.prototype.write = function(message) {
   }
 };
 
+Stdout.prototype.pipe = function(stdin) {
+  this.write = stdin.write.bind(stdin);
+  this.log = stdin.log.bind(stdin);
+  this.clear = stdin.clear.bind(stdin);
+};
+
 function formErr(err) {
     return formGithubErr(err);
 }

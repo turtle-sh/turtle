@@ -5,6 +5,15 @@ Stdin = function() {
 Stdin.prototype.write = function(data) {
   this.trigger('write', data);
 };
+Stdin.prototype.log = function(data) {
+  this.trigger('write', data);
+};
+Stdin.prototype.err = function(data) {
+  this.trigger('write', data);
+};
+Stdin.prototype.clear = function(data) {
+  this.trigger('write', data);
+};
 
 Stdin.prototype.on = function(name, fn) {
   if(! (name in this.listeners) ) {
