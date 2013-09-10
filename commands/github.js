@@ -94,8 +94,13 @@ define([],[
           return this.exit();
         }
         auth.apply(this).then(function() {
-          this.fs = github.getRepo(repoUser, repoName);
-          this.fs.show(function(err, repo) {
+          if(repoName.indexOf('/') > -1) {
+            repoUser = repoName.split('/')[0];
+            repoName = repoName.split('/')[1];
+          }
+          this.fs(github.getRepo(repoUser, repoName));
+          console.log(this.fs, this.fs() );
+          this.fs().show(function(err, repo) {
             if(err) {
               return this.exit(err);
             }
@@ -125,8 +130,8 @@ define([],[
         }
         auth.apply(this).then(function() {
           var res = Q.defer();
-          if(this.fs && this.fs instanceof Github.Repository) {
-            repo = this.fs;
+          if(this.fs() && this.fs() instanceof Github.Repository) {
+            repo = this.fs();
           } else {
             repo = github.getRepo(repoUser, repoName);
           }
@@ -168,8 +173,8 @@ define([],[
           return this.exit();
         }
         auth.apply(this).then(function() {
-          if(this.fs && this.fs instanceof Github.Repository) {
-            repo = this.fs;
+          if(this.fs() && this.fs() instanceof Github.Repository) {
+            repo = this.fs();
           } else {
             repo = github.getRepo(repoUser, repoName);
           }

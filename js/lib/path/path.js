@@ -1,0 +1,1 @@
+window.path = require('path');

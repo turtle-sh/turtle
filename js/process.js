@@ -2,6 +2,8 @@ Process = function(conf) {
   this.init.apply(this,arguments);
 };
 
+_.extend(Process.prototype, Backbone.Events);
+
 Process.prototype.init = function(conf) {
   _.extend(this, conf, Backbone.Events);
 
@@ -16,6 +18,16 @@ Process.prototype.init = function(conf) {
 
 };
 
+Process.prototype.spawn = function() {
+  var process = new Process();
+  process.cwd = this.cwd;
+  process.chdir = this.chdir;
+  process.fs = this.fs;
+  process.stdout.pipe(this.stdin);
+  process.exit = this.exit;
+  return process;
+};
+
 Process.prototype.cwd = function() {
   return this._cwd;
 };
@@ -28,9 +40,13 @@ Process.prototype.chdir = function(dir) {
 Process.prototype.commands = [];
 
 
-Process.prototype.exec = function(command) {
-  var process = new Process();
-  process.stdout.pipe(this.stdin);
+Process.prototype.exec = function(command, noSpawn) {
+  var process;
+  if(noSpawn) {
+    process = this;
+  } else {
+    process = this.spawn();
+  }
 
   // Give the process something to exit
   process.exit = function(e) {

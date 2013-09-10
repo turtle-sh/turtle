@@ -55,10 +55,21 @@ Turtle.prototype.template = function() {
 
 Turtle.prototype.commands = Process.prototype.commands;
 
+Turtle.prototype.fs = function(val) {
+  if(val) {
+    this._fs = val;
+  } else {
+    return this._fs;
+  }
+};
+
 
 Turtle.prototype.exec = function(command) {
   var process = new Process();
   process.stdout.pipe(this.stdout);
+  process.cwd = this.cwd;
+  process.chdir = this.chdir;
+  process.fs = this.fs;
 
   // Give the process something to exit
   process.exit = function(e) {

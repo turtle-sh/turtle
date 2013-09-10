@@ -1,7 +1,8 @@
 define({
   "expr": /^ls/,
   "fn": function() {
-    if(this.fs && this.fs instanceof Github.Repository) {
+    console.log(this.fs() );
+    if(this.fs() && this.fs() instanceof Github.Repository) {
       this.exit();
       this.exec('github ls-tree master --name-only');
     } else {

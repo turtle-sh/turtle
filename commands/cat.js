@@ -1,7 +1,7 @@
 define({
   "expr": /^cat /,
   "fn": function(args) {
-    if(this.fs && this.fs instanceof Github.Repository) {
+    if(this.fs() && this.fs() instanceof Github.Repository) {
       this.exit();
       var newArgs = args.slice(0);
       newArgs.unshift('github');

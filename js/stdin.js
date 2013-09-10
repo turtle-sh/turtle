@@ -6,13 +6,13 @@ Stdin.prototype.write = function(data) {
   this.trigger('write', data);
 };
 Stdin.prototype.log = function(data) {
-  this.trigger('write', data);
+  this.trigger('log', data);
 };
 Stdin.prototype.err = function(data) {
-  this.trigger('write', data);
+  this.trigger('err', data);
 };
 Stdin.prototype.clear = function(data) {
-  this.trigger('write', data);
+  this.trigger('clear', data);
 };
 
 Stdin.prototype.on = function(name, fn) {
