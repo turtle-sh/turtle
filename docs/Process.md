@@ -6,6 +6,6 @@ Commands receive their own process.
 
 Exits the command
 
-##[stdout](./stdout.md)
+##[stdout](./Stdout.md)
 
 Standard output stream
