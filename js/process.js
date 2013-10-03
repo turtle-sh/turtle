@@ -19,13 +19,18 @@ Process.prototype.init = function(conf) {
 };
 
 Process.prototype.spawn = function() {
-  var process = new Process();
-  process.cwd = this.cwd;
-  process.chdir = this.chdir;
-  process.fs = this.fs.bind(this);
-  process.stdout.pipe(this.stdin);
-  process.exit = this.exit;
-  return process;
+  var p = new Process();
+  p.cwd = this.cwd.bind(this);
+  p.chdir = this.chdir.bind(this);
+  p.el = this.el;
+  p.fs = this.fs.bind(this);
+  p.stdout.pipe(this.stdin);
+  if(! ('el' in this.stdout) ) {
+    this.stdout.el = this.el;
+  }
+  p.stdout.el = this.stdout.el;
+  p.exit = this.exit;
+  return p;
 };
 
 Process.prototype.cwd = function() {
@@ -41,17 +46,17 @@ Process.prototype.commands = [];
 
 
 Process.prototype.exec = function(command, noSpawn) {
-  var process;
+  var p;
   if(noSpawn) {
-    process = this;
+    p = this;
   } else {
-    process = this.spawn();
+    p = this.spawn();
   }
 
   // Give the process something to exit
-  process.exit = function(e) {
+  p.exit = function(e) {
     if(e) {
-      process.stdout.err(e);
+      p.stdout.err(e);
     }
   }.bind(this);
 
@@ -59,11 +64,11 @@ Process.prototype.exec = function(command, noSpawn) {
   found = _(this.commands).some(function(commandObj) {
     if (commandObj.expr.test(command) ) {
       try {
-        commandObj.fn.call(process, command.split(' '));
+        commandObj.fn.call(p, command.split(' '));
       } catch(e) {
         window.e = e;
-        process.stdout.err(e)
-        process.exit();
+        p.stdout.err(e)
+        p.exit();
       }
       return true;
     }
@@ -72,7 +77,7 @@ Process.prototype.exec = function(command, noSpawn) {
   // Or go back
   if(!found) {
     this.stdout.log("turtle: " + command + ": command not found")
-    process.exit();
+    p.exit();
   }
 };
 
